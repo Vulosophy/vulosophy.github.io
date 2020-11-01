@@ -14,11 +14,11 @@ function setup() {
 }
 
 function draw() {
-  console.log("draw called");
   background("black");
 
   if (bullet.isTouching(wall)) {
     bullet.x = 1180;
+    bullet.velocityX = 0;
     var damage = 0.5 * weight * speed * speed / thickness*thickness*thickness;
   }
   if (damage > 10) {
