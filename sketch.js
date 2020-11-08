@@ -1,32 +1,42 @@
-var bullet, wall, speed, weight, thickness;
-function setup() {
-  createCanvas(1600, 800);
-  speed = random(223, 321);
-  weight = random(30, 52);
-  thickness = random(32,100);
-  bullet = createSprite(50, 100, 40, 10);
-  bullet.shapeColor = ("white");
-  bullet.velocityX = speed;
-  wall = createSprite(1500, 100, thickness, height/2);
-  wall.shapeColor =  color(80,80,80);
+const Engine = Matter.Engine;
+const World= Matter.World;
+const Bodies = Matter.Bodies;
 
+var engine, world;
+var ball1, ball2;
+var color1, color2;
+var v1,v2;
+
+function setup(){
+    var canvas = createCanvas(400,400);
+    engine = Engine.create();
+    world = engine.world;
+
+    var ball_options = {
+        restitution: 1.5
+    }
+    ball1 = Bodies.circle (50, 50, 5, ball_options);
+    World.add(world, ball1); 
+    ball2 = Bodies.circle (350, 350, 5, ball_options);
+    World.add(world, ball2);    
+    color1 = color(random(0,360), random(0,360), random(0,360));
+    v1 = random(1, 10);
+    v2 = random(1, 10);
 }
+function draw(){
+    background(0)
+    Engine.update(engine);
+    ellipseMode (RADIUS);
+    ellipse (ball1.position.x , ball1.position.y, 20, 20);
+    ellipse (ball2.position.x , ball2.position.y, 20, 20);
+    var collision = Matter.SAT.collides(ball1.body, ball2.body);
+    background(0);
+    if (collsion.collided){
+        color2 = color(random(0,360),random(0,360),random(0,360));
+        ball1.shapeColor = color2;
+        ball2.shapeColor = color2;
+    }
 
-function draw() {
-  background("black");
 
-  if (bullet.isTouching(wall)) {
-    bullet.velocityX = 0;
-    bullet.x = bullet.x-30;
-    var damage = 0.5 * weight * speed * speed / thickness*thickness*thickness;
-  }
-  if (damage > 10) {
-    bullet.shapeColor = color(255, 0, 0);
-  }
-  
-  if (damage < 10) {
-    bullet.shapeColor = color(0, 255, 0);
-  }
-
-  drawSprites();
+drawSprites();
 }
