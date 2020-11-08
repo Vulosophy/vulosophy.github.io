@@ -1,42 +1,65 @@
+var helicopterIMG, helicopterSprite, packageSprite,packageIMG;
+var packageBody,ground
 const Engine = Matter.Engine;
-const World= Matter.World;
+const World = Matter.World;
 const Bodies = Matter.Bodies;
+const Body = Matter.Body;
 
-var engine, world;
-var ball1, ball2;
-var color1, color2;
-var v1,v2;
-
-function setup(){
-    var canvas = createCanvas(400,400);
-    engine = Engine.create();
-    world = engine.world;
-
-    var ball_options = {
-        restitution: 1.5
-    }
-    ball1 = Bodies.circle (50, 50, 5, ball_options);
-    World.add(world, ball1); 
-    ball2 = Bodies.circle (350, 350, 5, ball_options);
-    World.add(world, ball2);    
-    color1 = color(random(0,360), random(0,360), random(0,360));
-    v1 = random(1, 10);
-    v2 = random(1, 10);
+function preload()
+{
+	helicopterIMG=loadImage("helicopter.png")
+	packageIMG=loadImage("package.png")
 }
-function draw(){
-    background(0)
-    Engine.update(engine);
-    ellipseMode (RADIUS);
-    ellipse (ball1.position.x , ball1.position.y, 20, 20);
-    ellipse (ball2.position.x , ball2.position.y, 20, 20);
-    var collision = Matter.SAT.collides(ball1.body, ball2.body);
-    background(0);
-    if (collsion.collided){
-        color2 = color(random(0,360),random(0,360),random(0,360));
-        ball1.shapeColor = color2;
-        ball2.shapeColor = color2;
-    }
+
+function setup() {
+	createCanvas(800, 700);
+	rectMode(CENTER);
+	
+
+	packageSprite=createSprite(width/2, 80, 10,10);
+	packageSprite.addImage(packageIMG)
+	packageSprite.scale=0.2
+
+	helicopterSprite=createSprite(width/2, 200, 10,10);
+	helicopterSprite.addImage(helicopterIMG)
+	helicopterSprite.scale=0.6
+
+	groundSprite=createSprite(width/2, height-35, width,10);
+	groundSprite.shapeColor=color(255)
 
 
-drawSprites();
+	engine = Engine.create();
+	world = engine.world;
+
+	packageBody = Bodies.circle(width/2 , 200 , 5 , {restitution:3, isStatic:true});
+	World.add(world, packageBody);
+	
+
+	//Create a Ground
+	ground = Bodies.rectangle(width/2, 650, width, 10 , {isStatic:true} );
+ 	World.add(world, ground);
+
+
+	Engine.run(engine);
+  
 }
+
+
+function draw() {
+  rectMode(CENTER);
+  background(0);
+  packageSprite.x= packageBody.position.x 
+  packageSprite.y= packageBody.position.y 
+  drawSprites();
+ 
+}
+
+function keyPressed() {
+ if (keyCode === DOWN_ARROW) {
+    // Look at the hints in the document and understand how to make the package body fall only on
+    
+  }
+}
+
+
+
